@@ -1,0 +1,59 @@
+<div><div class="modal-body">
+  <div class="row">
+    <div class="col-sm-10" >
+      <!--<div class="card">-->
+      <!--<div class="card-header">
+        <strong>Company</strong>
+        <small>Form</small>
+      </div>-->
+<div  id="view-container">
+      <form name="form" style="background-color: white" >
+        <div class="card-block">
+          <div class="form-group">
+            <label for="name">Company</label>
+            <input type="text" disabled="disabled" class="form-control" id="name" placeholder="Enter your company name" name="name"
+                   [(ngModel)]="model.name" #name="ngModel" required/>
+          </div>
+
+
+          <div class="form-group">
+            <label for="street">Street</label>
+            <input type="text" disabled="disabled" class="form-control" id="street" placeholder="Enter street name" name="street"
+                   [(ngModel)]="model.street" #street="ngModel" required/>
+          </div>
+          <div class="row">
+            <div class="form-group col-sm-8">
+              <label for="city">City</label>
+              <input type="text" disabled="disabled"  class="form-control" id="city" placeholder="Enter your city" name="city"
+                     [(ngModel)]="model.city" #city="ngModel" required/>
+            </div>
+            <div class="form-group col-sm-4">
+              <label for="postal-code">Postal Code</label>
+              <input type="number" disabled="disabled"  class="form-control" id="postal-code" placeholder="Postal Code" name="postalcode"
+                     [(ngModel)]="model.postalcode" #postalcode="ngModel" required/>
+
+            </div>
+          </div>
+          <!--/.row-->
+          <div class="form-group">
+            <label for="country">Country</label>
+            <input type="text" disabled="disabled" class="form-control" id="country" placeholder="Country name" name="country"
+                   [(ngModel)]="model.country" #country="ngModel" required/>
+          </div>
+        </div>
+      </form>
+</div>
+      <br>
+      <div class="form-inline pull-right">
+      <button  type="button" style="padding-left: 5%" class="btn btn-primary" (click)="backLoc()"><i class="icon-arrow-left-circle"></i>&nbsp; Back
+      </button>
+      &nbsp;&nbsp;
+      <button type="button" class="btn btn-success pull-right" (click)="download()">
+        <i class="fa fa-file-pdf-o"></i> &nbsp; Download as PDF
+      </button>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+

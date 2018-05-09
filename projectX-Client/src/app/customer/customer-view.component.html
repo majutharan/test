@@ -1,0 +1,50 @@
+<div class="modal-body">
+  <div class="row">
+    <div class="col-sm-8 pull-right" id="view-container">
+      <form name="form" (ngSubmit)="f.form.valid && register(); f.form.reset()" #f="ngForm" novalidate
+            style="background-color: white">
+        <div class="card-block">
+          <div class="form-group">
+            <label>First Name</label>
+            <input type="text" disabled="disabled" pattern="[a-zA-Z]+" class="form-control" placeholder="Firstrname"
+                   name="firstName"
+                   [(ngModel)]="model.firstName" #firstName="ngModel" required/>
+          </div>
+          <div class="form-group">
+            <label>last Name</label>
+            <input type="text" disabled="disabled" class="form-control" placeholder="Lastname" name="lastName"
+                   [(ngModel)]="model.lastName" #lastName="ngModel" required/>
+          </div>
+          <div class="form-group">
+            <label>Email</label>
+            <input type="text" disabled="disabled" class="form-control" placeholder="Email" name="email"
+                   [(ngModel)]="model.email" #email="ngModel" required/>
+          </div>
+        <div class="form-group">
+          <label>Phone Number</label>
+          <input type="number" disabled="disabled" class="form-control" placeholder="Phone Number" name="phoneNumber"
+                 [(ngModel)]="model.phoneNumber" #phoneNumber="ngModel" required/>
+        </div>
+        <div class="form-group">
+          <label>create By</label>
+          <input type="text" disabled="disabled" onkeypress="return (event.charCode >= 65 || event.charCode >= 97)" class="form-control" placeholder="Created By" name="createdBy"
+                 [(ngModel)]="model.createdBy" #createdBy="ngModel" required/>
+        </div>
+        <div class="form-group">
+          <label>created Date</label>
+          <input type="date" disabled="disabled"  class="form-control" placeholder="" name="createdDate"
+                 [(ngModel)]="model.createdDate" #createdDate="ngModel" minDate="10/19/1995"/>
+        </div></div>
+      </form>
+      <br>
+      <div class="form-inline pull-right">
+        <button  type="button" style="padding-left: 5%" class="btn btn-primary" (click)="backLoc()"><i class="icon-arrow-left-circle"></i>&nbsp; Back
+        </button>
+        <!--&nbsp;&nbsp;
+        <button type="button" class="btn btn-success pull-right" (click)="download()">
+          <i class="fa fa-file-pdf-o"></i> &nbsp; Download as PDF
+        </button>-->
+      </div>
+    </div>
+  </div>
+</div>

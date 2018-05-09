@@ -1,0 +1,332 @@
+<div class="col-lg-14">
+  <div class="card">
+    <div class="card-block">
+      <button class="btn btn-success pull-right" (click)="openAddNewWindow()"><i class="icon-plus icons font-1xl"></i>
+        Add New Company
+      </button>
+      <h4>Company</h4>
+    </div>
+  </div>
+</div>
+
+<div *ngFor="let alert of alerts">
+  <alert [type]="alert.type" [dismissOnTimeout]="alert.timeout">{{ alert.msg }}</alert>
+</div>
+
+<div class="row">
+  <div class="col-lg-12">
+    <div class="card">
+      <div class="card-header">
+        <div class="col-lg-6.8 pull-right">
+          <input type="text" [(ngModel)]="searchText "
+                 class="form-control search pull-left" placeholder="Search..."/>
+        </div>
+        <i class="icon-briefcase icons font-2xl"></i> Company Table
+      </div>
+      <div class="card-block">
+        <table class="table table-striped">
+          <thead>
+          <tr>
+            <th>Company Id</th>
+            <th>Company Name</th>
+            <th>Street</th>
+            <th>City</th>
+            <th>Postalcode</th>
+            <th>Country</th>
+            <th>Projects</th>
+            <th>User</th>
+            <th>Action</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr
+            *ngFor="let company of allCompanies |companysearch:searchText | paginate: { itemsPerPage: 5, currentPage: page}; let i=index">
+            <td>{{company.cid}}</td>
+            <td>{{company.name}}</td>
+            <td>{{company.street}}</td>
+            <td>{{company.city}}</td>
+            <td>{{company.postalcode}}</td>
+            <td>{{company.country}}</td>
+            <td>
+              <div *ngFor="let project of company.projects">{{project.name}}</div>
+            </td>
+            <td>
+              <div *ngFor="let usr of company.users">{{usr.username}}</div>
+            </td>
+
+            <td>
+              <div class="btn-group" dropdown>
+                <button dropdownToggle type="button" class="btn btn-primary dropdown-toggle">
+                  Action <span class="caret"></span>
+                </button>
+                <ul *dropdownMenu class="dropdown-menu" role="menu">
+                  <li role="menuitem"><a class="dropdown-item" (click)="dangerModal.show()">
+                    <i class="icon-trash icons" style="color: red"></i>Delete</a>
+                  </li>
+                  <li role="menuitem"><a class="dropdown-item" (click)="showUpdateCompany(company)"><i
+                    class="icon-action-undo icons " style="color: green"></i>Edit</a>
+                  </li>
+                  <li role="menuitem"><a class="dropdown-item" [routerLink]="['view', company.cid]"><i
+                    class="icon-size-fullscreen icons" style="color: blue"></i>View</a></li>
+                  <li role="menuitem"><a class="dropdown-item" (click)="openAddProjectModal(company.cid)"> <i
+                    class="fa fa-plus-square" style="color: mediumseagreen"></i>Add New Project</a></li>
+                  <li role="menuitem"><a class="dropdown-item" (click)="openAddUserModal(company.cid)">
+                    <i class="fa fa-plus-square" style="color: green"></i>Add New User</a></li>
+                </ul>
+              </div>
+            </td>
+
+            <td>
+
+              <div bsModal #dangerModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"
+                   aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-danger" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h4 class="modal-title"><i class="fa fa-trash fa-lg mt-1"></i> Delete</h4>
+                      <button type="button" class="close" (click)="dangerModal.hide()" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body">
+                      <h5 style="color: black">Do you want delete?</h5>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" (click)="dangerModal.hide()">No</button>
+                      <button type="button" class="btn btn-primary" (click)="deleteCompany(company.cid)"
+                              (click)="dangerModal.hide()">Yes
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </td>
+
+            <div class="modal fade" bsModal #staticModal1="bs-modal" [config]="{backdrop: 'static'}"
+                 tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+              <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h4 class="modal-title pull-left"><strong>New Project</strong>
+                    </h4>
+                    <button type="button" class="close pull-right" aria-label="Close" (click)="staticModal1.hide()">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <!-- //form-->
+                  <div class="modal-body">
+                    <div class="row">
+                      <div class="col-sm-12 pull-right">
+                        <form name="form" (ngSubmit)="pform.valid && registerProject()" #pform="ngForm" novalidate>
+                          <div class="card-block">
+                            <div class="form-group">
+                              <label for="name">Project Name</label>
+                              <input type="text" class="form-control" placeholder="Enter your project name"
+                                     name="pname" [(ngModel)]="projectmodel.name" #pname="ngModel" required/>
+                              <div *ngIf="pname.invalid && (pname.dirty || pname.touched || pform.submitted)"
+                                   class="help-block"> Project
+                                Name is required
+                              </div>
+                            </div>
+                            <button type="submit" class="btn btn-block btn-success">
+                              Create Project
+                            </button>
+                          </div>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="modal fade" bsModal #userModal="bs-modal" [config]="{backdrop: 'static'}"
+                 tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+              <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h4 class="modal-title pull-left"><strong>Add New User</strong>
+                    </h4>
+                    <button type="button" class="close pull-right" aria-label="Close" (click)="userModal.hide()">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <!-- //form-->
+                  <div class="modal-body">
+                    <div class="row">
+                      <div class="col-sm-12 pull-right">
+                        <form name="form" (ngSubmit)="f.form.valid && registerUser();" #f="ngForm"
+                              novalidate>
+                          <div class="card-block">
+                            <div class="form-group">
+                              <label>First Name</label>
+                              <input type="text" class="form-control" placeholder="Firstrname" name="firstName"
+                                     [(ngModel)]="usermodel.firstName" #firstName="ngModel" required/>
+                              <div *ngIf="firstName.invalid && (firstName.dirty || firstName.touched || f.submitted)"
+                                   class="help-block">
+                                <div>First Name is required</div>
+                              </div>
+                            </div>
+
+
+                            <div class="form-group">
+                              <label>last Name</label>
+                              <input type="text" class="form-control" placeholder="Lastname" name="lastName"
+                                     [(ngModel)]="usermodel.lastName" #lastName="ngModel" required/>
+                              <div *ngIf="lastName.invalid && (lastName.dirty || lastName.touched || f.submitted)"
+                                   class="help-block">Last
+                                Name is required
+                              </div>
+                            </div>
+                            <div class="form-group">
+                              <label>User Name</label>
+                              <input type="text" class="form-control" placeholder="Username" name="username"
+                                     [(ngModel)]="usermodel.username" #username="ngModel" required/>
+                              <div *ngIf="username.invalid && (username.dirty || username.touched || f.submitted)"
+                                   class="help-block">
+                                Username is required
+                              </div>
+                            </div>
+                            <div class="form-group">
+                              <label>Password</label>
+                              <input type="password" class="form-control" placeholder="Password" name="password"
+                                     [(ngModel)]="usermodel.password" #password="ngModel" required/>
+                              <div *ngIf="password.invalid && (password.dirty || password.touched || f.submitted)"
+                                   class="help-block">
+                                Password is required
+                              </div>
+                            </div>
+
+                            <div><input type="radio" value="ADMIN" name="roles" [(ngModel)]="usermodel.role"> Admin
+                              <input type="radio" value="USER" name="roles" [(ngModel)]="usermodel.role"> User
+                            </div>
+
+                            <br/>
+
+                            <button [hidden]="isCreateUser" type="submit" class="btn btn-block btn-success">Create
+                              User
+                            </button>
+                            <button [hidden]="isBackUser" type="button" class="btn btn-block btn-outline-secondary"
+                                    (click)="back()">
+                              Back
+                            </button>
+                            <button [hidden]="isUpdateUser" type="submit" class="btn btn-block btn-success">Save
+                              Changes
+                            </button>
+                          </div>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </tr>
+
+          </tbody>
+        </table>
+        <div class="has-text-centered">
+          <pagination-controls (pageChange)="page = $event"></pagination-controls>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  <!--/.col-->
+</div>
+
+<div class="modal fade" bsModal #staticModal="bs-modal" [config]="{backdrop: 'static'}"
+     tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+
+        <h4 [hidden]="isUpdateButtonClicked" class="modal-title pull-left"><strong>Add New Company</strong></h4>
+        <h4 [hidden]="isAddButtonClicked" class="modal-title pull-left"><strong>Update Company</strong>
+        </h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="staticModal.hide()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <!-- //form-->
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-sm-12 pull-right">
+
+
+            <form  name="form"  (ngSubmit)="cform.form.valid && register();" #cform="ngForm"
+                  novalidate>
+              <div class="card-block">
+                <div class="form-group">
+                  <label for="name">Company</label>
+                  <input type="text" class="form-control" id="name" placeholder="Enter your company name" name="name"
+                         [(ngModel)]="model.name" #name="ngModel" required/>
+                  <div *ngIf=" name.invalid && (name.dirty || name.touched || cform.submitted)" class="help-block">
+                    <div>Company Name is
+                      required</div>
+                  </div>
+                </div>
+
+
+                <div class="form-group">
+                  <label for="street">Street</label>
+                  <input type="text" class="form-control" id="street" placeholder="Enter street name" name="street"
+                         [(ngModel)]="model.street" #street="ngModel" required/>
+                  <div *ngIf="street.invalid && (street.dirty || street.touched || cform.submitted)" class="help-block">
+                    Street Name is
+                    required
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="form-group col-sm-8">
+                    <label for="city">City</label>
+                    <input type="text" class="form-control" id="city" placeholder="Enter your city" name="city"
+                           [(ngModel)]="model.city" #city="ngModel" required/>
+                    <div *ngIf="city.invalid && (city.dirty || city.touched || cform.submitted)" class="help-block">
+                      City Name is
+                      required
+                    </div>
+                  </div>
+                  <div class="form-group col-sm-4">
+                    <label for="postal-code">Postal Code</label>
+                    <input type="number" onkeypress="return event.charCode >= 48" min="1" class="form-control" id="postal-code" placeholder="Postal Code"
+                           name="postalcode"
+                           [(ngModel)]="model.postalcode" #postalcode="ngModel" required/>
+                    <div *ngIf="postalcode.invalid && (postalcode.dirty || postalcode.touched || cform.submitted)"
+                         class="help-block">
+                      Postal-Code is required
+                    </div>
+                  </div>
+                </div>
+                <!--/.row-->
+                <div class="form-group">
+                  <label for="country">Country</label>
+                  <input type="text" class="form-control" id="country" placeholder="Country name" name="country"
+                         [(ngModel)]="model.country" #country="ngModel" required/>
+                  <div *ngIf="country.invalid && (country.dirty || country.touched || cform.submitted)"
+                       class="help-block"> Country Name is
+                    required
+                  </div>
+                </div>
+
+                <button type="submit" [hidden]="isUpdateButtonClicked" [disabled]="dis"
+                        class="btn btn-block btn-success">
+                  Create Company
+                </button>
+
+                <button type="submit" [hidden]="isAddButtonClicked" [disabled]="dis"
+                        class="btn btn-block btn-success">
+                  Save Changes
+                </button>
+
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+

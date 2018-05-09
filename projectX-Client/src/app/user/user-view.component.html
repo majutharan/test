@@ -1,0 +1,46 @@
+<div class="modal-body">
+  <div class="row">
+    <div class="col-sm-8 pull-right" id="view-container">
+      <form name="form" (ngSubmit)="f.form.valid && register(); f.form.reset()" #f="ngForm" novalidate
+            style="background-color: white">
+        <div class="card-block">
+          <div class="form-group">
+            <label>First Name</label>
+            <input type="text" [disabled]="disabled" pattern="[a-zA-Z]+" class="form-control" placeholder="Firstrname"
+                   name="firstName"
+                   [(ngModel)]="model.firstName" #firstName="ngModel" required/>
+            <div *ngIf="firstName.invalid && (firstName.dirty || firstName.touched || f.submitted)"
+                 class="help-block">
+              First Name is required
+            </div>
+          </div>
+          <div class="form-group">
+            <label>last Name</label>
+            <input type="text" [disabled]="disabled" class="form-control" placeholder="Lastname" name="lastName"
+                   [(ngModel)]="model.lastName" #lastName="ngModel" required/>
+          </div>
+          <div class="form-group">
+            <label>Email</label>
+            <input type="text" [disabled]="disabled" class="form-control" placeholder="Username" name="username"
+                   [(ngModel)]="model.username" #username="ngModel" required/></div>
+          <div class="form-group">
+            <label>Password</label>
+            <input type="password" [disabled]="disabled" class="form-control" placeholder="Password" name="password"
+                   [(ngModel)]="model.password" #password="ngModel" required/>
+          </div>
+          <br/>
+        </div>
+
+      </form>
+      <br>
+      <div class="form-inline pull-right classPossition">
+        <button  type="button" style="padding-left: 5%" class="btn btn-primary" (click)="backLoc()"><i class="icon-arrow-left-circle"></i>&nbsp; Back
+        </button>
+      <!--  &nbsp;&nbsp;
+        <button type="button" class="btn btn-success" (click)="download()">
+          <i class="fa fa-file-pdf-o"></i> &nbsp; Download as PDF
+        </button><br/>-->
+      </div>
+    </div>
+  </div>
+</div>

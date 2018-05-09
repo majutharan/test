@@ -1,0 +1,66 @@
+<div class="col-lg-14">
+  <div class="card">
+    <div class="card-block">
+
+      <button class="btn btn-success pull-right" (click)="openAddNewWindow()"><i class="icon-plus icons font-1xl"></i>
+        Send New Mail
+      </button>
+      <h4>Mail</h4>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" bsModal #staticModal="bs-modal" [config]="{backdrop: 'static'}"
+     tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title pull-left"><strong>Send New Mail</strong>
+        </h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="staticModal.hide()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <!-- //form-->
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-sm-12 pull-right">
+            <form class="align-middle" name="form" (ngSubmit)="f.form.valid && sendMail();" #f="ngForm" novalidate>
+              <div class="card-block">
+
+                <div class="form-group row">
+                  <label class="col-md-2 col-form-label">To:</label>
+                  <div class="col-md-8 padtextdiv">
+                    <mwl-text-input-autocomplete-container>
+      <textarea class="form-group row padtextarea"  placeholder="Type @ to search..." rows="1" [(ngModel)]="model.email" mwlTextInputAutocomplete [findChoices]="findChoices1" [getChoiceLabel]="getChoiceLabel" name="email"></textarea>
+                    </mwl-text-input-autocomplete-container>
+                    <!--<span class="help-block">Please enter your email</span>-->
+                  </div>
+                  <div class="checkbox pad">
+                    <label style="font-size: 1em">
+                      <input type="checkbox" value="" checked>
+                      <span class="cr"><i class="cr-icon fa fa-check"></i></span>
+                      All Customers
+                    </label>
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label class="col-md-2 col-form-label" for="textarea-input">Message:</label>
+                  <div class="col-md-8">
+                    <textarea id="textarea-input" name="textarea-input" rows="9" class="form-control"
+                              placeholder="Content.."></textarea>
+                  </div>
+                </div>
+                <div class="padbtn">
+                  <button class="btn btn-primary pull-right">
+                    Send
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

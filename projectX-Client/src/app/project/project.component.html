@@ -1,0 +1,182 @@
+<!--alert-->
+<div *ngFor="let alert of alerts">
+  <alert [type]="alert.type" [dismissOnTimeout]="alert.timeout">{{ alert.msg }}</alert>
+</div>
+
+<div *ngFor="let alert of alertsupdate">
+  <alert [type]="alert.type" [dismissOnTimeout]="alert.timeout">{{ alert.msg }}</alert>
+</div>
+<!--alert end-->
+<!--table-->
+<div class="row">
+  <div class="col-lg-12">
+    <div class="card">
+      <div class="card-header">
+        <div class="col-lg-6.8 pull-right">
+          <input type="text" [(ngModel)]="searchText "
+                 class="form-control search pull-left" placeholder="Search..."/>
+        </div>
+        <i class="fa fa-folder-o fa-lg mt-1"></i> Project table
+      </div>
+      <div class="card-block">
+        <table class="table table-striped">
+          <thead>
+          <tr>
+            <th>Pid</th>
+            <th>Project Name</th>
+            <th>Pcid</th>
+            <th>Users</th>
+            <th>Action</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr
+            *ngFor="let project of allProjects |projectsearch:searchText | paginate: { itemsPerPage:5, currentPage: page}; let i=index">
+            <!--pagination-->
+            <td>{{project.pid}}</td>
+            <td>{{project.name}}</td>
+            <td>{{project.pcid}}</td>
+            <td>
+              <div *ngFor="let user of project.users">{{user.username}}</div>
+            </td>
+            <td>
+              <div class="btn-group" dropdown>
+                <button dropdownToggle type="button" class="btn btn-primary dropdown-toggle">
+                  Action<span class="caret"></span>
+                </button>
+                <ul *dropdownMenu class="dropdown-menu" role="menu">
+                  <li role="menuitem"><a class="dropdown-item" (click)="openDeleteModal()"><i class="icon-trash icons"
+                                                                                              style="color: red"></i>Delete</a>
+                  </li>
+                  <li role="menuitem"><a class="dropdown-item" (click)="openUpdate(project)"><i
+                    class="icon-action-undo icons " style="color: green"></i>Edit</a>
+                  </li>
+                  <li role="menuitem"><a class="dropdown-item"><i class="icon-size-fullscreen icons"
+                                                                  style="color: blue"></i>View</a></li>
+                  <li role="menuitem"><a class="dropdown-item" (click)="openAssignProject(project.pid)"><i
+                    class="fa fa-plus-square" style="color: mediumseagreen"></i>Assign User</a></li>
+                </ul>
+              </div>
+
+            </td>
+            <!--delete modal-->
+            <div bsModal #dangerModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"
+                 aria-labelledby="myModalLabel" aria-hidden="true">
+              <div class="modal-dialog modal-danger" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h4 class="modal-title"><i class="fa fa-trash fa-lg mt-1"></i> Delete</h4>
+                    <button type="button" class="close" (click)="dangerModal.hide()" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                    <h5 style="color: black">Do you want delete?</h5>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" (click)="dangerModal.hide()">No</button>
+                    <button type="button" class="btn btn-primary" (click)="deleteProject(project.pid)"
+                            (click)="dangerModal.hide()">Yes
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!--delete modal end-->
+          </tbody>
+        </table>
+        <!--pagination event-->
+        <div class="has-text-centered">
+          <pagination-controls (pageChange)="page = $event"></pagination-controls>
+        </div>
+        <!--pagination event end-->
+      </div>
+    </div>
+  </div>
+</div>
+<!--table end-->
+<!--form-->
+<div class="modal fade" bsModal #staticModal="bs-modal" [config]="{backdrop: 'static'}"
+     tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title pull-left"><strong>Project Form</strong>
+        </h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="staticModal.hide()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <!-- //form-->
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-sm-12 pull-right">
+            <form name="form" (ngSubmit)="register()" #f="ngForm" novalidate>
+              <div class="card-block">
+                <div class="form-group">
+                  <label for="name">Project</label>
+                  <input type="text" id="name" placeholder="Enter your project name" name="name"
+                         [(ngModel)]="model.name" required/>
+                </div>
+                <!--<div *ngIf="pname.invalid && (pname.dirty || pname.touched || f.submitted)"
+                     class="help-block">project is required</div>-->
+
+                <button type="submit" class="btn btn-block btn-success" [hidden]="iscreate"
+                        (click)="createButtonClick()">
+                  Create Account
+                </button>
+                <br>
+              </div>
+            </form>
+            <button type="submit" class="btn btn-block btn-success" [hidden]="issave"
+                    (click)="update()">Save Changes
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!--
+form end-->
+<div class="modal fade" bsModal #projectModal="bs-modal" [config]="{backdrop: 'static'}"
+     tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title pull-left"><strong>Assign User</strong>
+        </h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="projectModal.hide()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <!-- //form-->
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-sm-12 pull-right">
+            <form name="form" (ngSubmit)="assignProject(id)" #f="ngForm" novalidate>
+              <div class="card-block">
+                <div>
+                  <label for="name">Users</label>
+                  <div class="">
+                    <angular2-multiselect [data]="dropdownList" name="projects1" [(ngModel)]="selectedItems"
+                                          [settings]="dropdownSettings"
+                                          (onSelect)="onItemSelect($event)"
+                                          (onDeSelect)="OnItemDeSelect($event)"
+                                          (onSelectAll)="onSelectAll($event)"
+                                          (onDeSelectAll)="onDeSelectAll($event)"></angular2-multiselect>
+                  </div>
+                </div>
+                <br>
+                <button type="submit" class="btn btn-block btn-success" [hidden]="iscreate"
+                        (click)="createButtonClick()">
+                  Assign User
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

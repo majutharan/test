@@ -1,0 +1,47 @@
+<div class="modal-body">
+  <div class="row">
+    <div class="col-sm-8 pull-right" id="view-container">
+      <!--<div class="card">-->
+      <!--<div class="card-header">
+        <strong>Company</strong>
+
+      </div>-->
+
+      <form name="form" (ngSubmit)="f.form.valid && register(); f.form.reset()" #f="ngForm" novalidate style="background-color: white">
+        <div class="card-block">
+          <div class="form-group">
+            <label>First Name</label>
+            <input  type="text" [disabled]="disabled" pattern="[a-zA-Z]+"  class="form-control" placeholder="Firstrname" name="firstName"
+                    [(ngModel)]="model.firstName" #firstName="ngModel" required/>
+          </div>
+          <div class="form-group">
+            <label>last Name</label>
+            <input type="text" [disabled]="disabled" class="form-control" placeholder="Lastname" name="lastName"
+                   [(ngModel)]="model.lastName" #lastName="ngModel" required/>
+          </div>
+          <div class="form-group">
+            <label>Email</label>
+            <input type="text" [disabled]="disabledEmail" class="form-control" placeholder="Username" name="username"
+                   [(ngModel)]="model.username" #username="ngModel" disabled required/></div>
+          <div class="form-group">
+            <label>Password</label>
+            <input type="password" [disabled]="disabled" class="form-control" placeholder="Password" name="password"
+                   [(ngModel)]="model.password" #password="ngModel" required/>
+          </div>
+          <br/>
+        </div>
+
+      </form>
+      <br>
+
+      <button type="button" [hidden]="editBtn" class="btn btn-success" (click)="edit()">
+        <i
+          class="icon-action-undo icons " style="color: green"></i> &nbsp; Edit Profile
+      </button>
+      <button type="button" [hidden]="saveBtn" class="btn btn-success" (click)="save()">
+        Save
+      </button><!--</div>-->
+
+    </div>
+  </div>
+</div>

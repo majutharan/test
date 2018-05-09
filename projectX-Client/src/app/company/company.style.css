@@ -1,0 +1,19 @@
+.help-block {
+  color: red;
+  font-size: small;
+}
+
+.search {
+  border-radius: 25px;
+  width: 600px;
+  border: 1px solid #73AD21;
+}
+
+/*
+.ng-valid[required], .ng-valid.required  {
+  border-left: 5px solid #42A948; !* green *!
+}
+.ng-invalid:not(form)  {
+  border-left: 5px solid #a94442; !* red *!
+}
+*/

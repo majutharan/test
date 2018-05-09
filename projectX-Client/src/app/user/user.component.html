@@ -1,0 +1,191 @@
+<!--header-->
+<div class="col-lg-14">
+  <div class="card">
+    <div class="card-block">
+
+      <button class="btn btn-success pull-right" (click)="openAddNewWindow()"><i class="icon-plus icons font-1xl"></i>
+        Add
+        User
+      </button>
+      <h4>Users</h4>
+    </div>
+  </div>
+</div>
+<!--header end-->
+<div *ngFor="let alert of alerts">
+  <alert [type]="alert.type" [dismissOnTimeout]="alert.timeout">{{ alert.msg }}</alert>
+</div>
+
+<div class="modal fade" bsModal #staticModal="bs-modal" [config]="{backdrop: 'static'}"
+     tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title pull-left" [hidden]="addUser"><strong>Add New User</strong>
+        </h4>
+        <h4 class="modal-title pull-left" [hidden]="editUser"><strong>Edit User</strong>
+        </h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="staticModal.hide()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <!-- //form-->
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-sm-12 pull-right">
+            <form name="form" (ngSubmit)="f.form.valid && register();"  #f="ngForm" novalidate>
+              <div class="card-block">
+                <div class="form-group">
+                  <label>First Name</label>
+                  <input type="text" onkeypress="return (event.charCode >= 65 || event.charCode >= 97)" class="form-control" placeholder="Firstname" name="firstName"
+                         [(ngModel)]="model.firstName" #firstName="ngModel" required/>
+                  <div *ngIf="firstName.invalid && (firstName.dirty || firstName.touched || f.submitted)"
+                       class="help-block">
+                    First Name is required
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label>last Name</label>
+                  <input type="text" onkeypress="return (event.charCode >= 65 || event.charCode >= 97)" class="form-control" placeholder="Lastname" name="lastName"
+                         [(ngModel)]="model.lastName" #lastName="ngModel" required/>
+                  <div *ngIf="lastName.invalid && (lastName.dirty || lastName.touched || f.submitted)"
+                       class="help-block">Last
+                    Name is required
+                  </div>
+                </div>
+                <!--<div><input type="radio" value="ADMIN" name="roles" [(ngModel)]="model.role"> Admin
+                  <input type="radio" value="USER" name="roles" [(ngModel)]="model.role"> User
+                </div>
+                <br/>-->
+                <div class="form-group">
+                  <label>Email</label>
+                  <input type="text" [disabled]="disabledForUser" class="form-control" placeholder="Email" name="username"
+                         [(ngModel)]="model.username" #username="ngModel" required email/>
+                  <div *ngIf="username.invalid && (username.dirty || username.touched || f.submitted)"
+                       class="help-block">
+                    Email is required
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label>Password</label>
+                  <input type="password" class="form-control" placeholder="Password" name="password"
+                         [(ngModel)]="model.password" #password="ngModel" required/>
+                  <div *ngIf="password.invalid && (password.dirty || password.touched || f.submitted)"
+                       class="help-block">
+                    Password is required
+                  </div>
+                </div>
+                <br/>
+                <button [hidden]="isCreateUser" type="submit" class="btn btn-block btn-success">Add New User
+                </button>
+                <button [hidden]="isBackUser" type="button" class="btn btn-block btn-outline-secondary"
+                        (click)="back()">
+                  Back
+                </button>
+              </div>
+            </form>
+            <button [hidden]="isUpdateUser" class="btn btn-block btn-success" (click)="update()">Save Changes</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!--demo end-->
+<!--table-->
+<div class="row">
+  <div class="col-lg-12">
+    <div class="card">
+      <div class="card-header">
+        <div>
+          <div class="col-lg-6.8 pull-right">
+            <input type="text" [(ngModel)]="searchText "
+                   class="form-control search pull-left" placeholder="Search..."/>
+          </div>
+          <div class="form-inline">
+            <i class="icon-people icons font-2xl "></i><h6> User table</h6></div>
+        </div>
+      </div>
+      <div class="card-block">
+        <table class="table table-striped">
+          <thead>
+          <tr>
+            <th>id</th>
+            <th>FirstName</th>
+            <th>LastName</th>
+            <th>Email</th>
+            <th>Password</th>
+            <th>Role</th>
+            <th>Action</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr
+            *ngFor="let user of allUser | usersearch:searchText| paginate: { itemsPerPage: 50, currentPage: page}; let i=index">
+            <!--pagination-->
+            <td>{{user.id}}</td>
+            <td>{{user.firstName}}</td>
+            <td>{{user.lastName}}</td>
+            <td>{{user.username}}</td>
+            <td (mouseover)="displayPassword = true" (mouseout)="displayPassword = false">{{displayPassword?
+              user.password : '****'}}
+            </td>
+            <td>{{user.role}}</td>
+            <td>
+
+              <div class="btn-group" dropdown>
+                <button dropdownToggle type="button" (click)="openDropDown()" class="btn btn-primary dropdown-toggle">
+                  Action <span class="caret"></span>
+                </button>
+                <ul *dropdownMenu class="dropdown-menu" role="menu">
+                  <li role="menuitem" [hidden]="isSuperAdmin"><a class="dropdown-item" (click)="dangerModal.show()"><i class="icon-trash icons"
+                                                                                               style="color: red"></i>Delete</a>
+                  </li>
+                  <li role="menuitem" [hidden]="isSuperAdmin"><a class="dropdown-item" (click)="updateUser(user)"><i
+                    class="icon-action-undo icons " style="color: green"></i>Edit</a>
+                  </li>
+                  <li role="menuitem"><a class="dropdown-item" [routerLink]="['view', user.id]"><i
+                    class="icon-size-fullscreen icons"
+                    style="color: blue"></i>View</a></li>
+                </ul>
+              </div>
+
+            </td>
+            <!--delete modal-->
+            <div bsModal #dangerModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"
+                 aria-labelledby="myModalLabel" aria-hidden="true">
+              <div class="modal-dialog modal-danger" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h4 class="modal-title"><i class="fa fa-trash fa-lg mt-1"></i> Delete</h4>
+                    <button type="button" class="close" (click)="dangerModal.hide()" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                    <h5 style="color: black">Do you want delete?</h5>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" (click)="dangerModal.hide()">No</button>
+                    <button type="button" class="btn btn-primary" (click)="deleteUser(user.id)">Yes
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!--delete modal end-->
+          </tbody>
+        </table>
+        <!--pagination event-->
+        <div class="has-text-centered">
+          <pagination-controls (pageChange)="page = $event"></pagination-controls>
+        </div>
+        <!--pagination event end-->
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!--table end-->

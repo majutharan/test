@@ -1,0 +1,46 @@
+<div class="app flex-row align-items-center">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-6">
+        <div class="card mx-2">
+          <div class="card-block p-2">
+
+            <div *ngFor="let alert of alerts">
+              <alert [type]="alert.type" [dismissOnTimeout]="alert.timeout">{{ alert.msg }}</alert>
+            </div>
+
+            <h1>Register</h1>
+            <form name="form" (ngSubmit)="f.form.valid && register(); f.form.reset()" #f="ngForm" novalidate>
+              <p class="text-muted">Create your account</p>
+            <div class="input-group mb-0" [ngClass]="{ 'has-error': firstName.invalid && (firstName.dirty || firstName.touched) }">
+              <label class="input-group-addon"><i class="icon-user"></i></label>
+              <input type="text" class="form-control" placeholder="Firstrname" name="firstName" [(ngModel)]="model.firstName" #firstName="ngModel" required /></div>
+              <div *ngIf="firstName.invalid && (firstName.dirty || firstName.touched)" class="help-block"><div>First Name is required</div></div>
+<br>
+
+            <div class="input-group mb-0" [ngClass]="{ 'has-error': lastName.invalid && (lastName.dirty || lastName.touched) }">
+              <span class="input-group-addon"><i class="icon-user"></i></span>
+              <input type="text" class="form-control" placeholder="Lastname" name="lastName" [(ngModel)]="model.lastName" #lastName="ngModel" required /></div>
+              <div *ngIf="lastName.invalid && (lastName.dirty || lastName.touched)" class="help-block">Last Name is required</div>
+<br>
+            <div class="input-group mb-0" [ngClass]="{ 'has-error': (username.invalid && (username.dirty || username.touched)) }">
+              <span class="input-group-addon"><i class="icon-user"></i></span>
+              <input type="text" class="form-control" placeholder="Username" name="username" [(ngModel)]="model.username" #username="ngModel" required /></div>
+              <div *ngIf="username.invalid && (username.dirty || username.touched)" class="help-block">Username is required</div>
+
+<br>
+            <div class="input-group mb-0" [ngClass]="{ 'has-error': password.invalid && (password.dirty || password.touched) }">
+              <span class="input-group-addon"><i class="icon-lock"></i></span>
+              <input type="password" class="form-control" placeholder="Password" name="password" [(ngModel)]="model.password" #password="ngModel" required /></div>
+              <div *ngIf="password.invalid && (password.dirty || password.touched)" class="help-block">Password is required</div>
+<br>
+              <button type="submit" class="btn btn-block btn-success">Create Account</button>
+            <button type="button" class="btn btn-block btn-outline-secondary" (click)="back()">Back</button></form>
+          </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
